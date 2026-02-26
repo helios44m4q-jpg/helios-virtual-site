@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Helios.Virtual | 3D Tours</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/framer-motion@11.0.3/dist/framer-motion.js"></script>
+    <style>
+        html { scroll-behavior: smooth; }
+        body { background-color: #09090b; color: #f4f4f5; margin: 0; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useMemo } = React;
+        const { motion, AnimatePresence } = window.Motion;
+
+        // Вставляем твой контент (COPY) и основной функционал
+        // Я адаптировал структуру под один файл
+        
+        const COPY = {
+            EN: {
+                brand: "Helios.Virtual",
+                nav: ["Services", "Industries", "Packages", "FAQ", "Contact"],
+                contactNow: "Contact now",
+                heroBadge: "Hamburg • Matterport Pro3 • DE / EN",
+                heroTitle: "Premium 3D tours for spaces that need to convert",
+                heroText: "We create fast-turnaround Matterport Pro3 scans with a cinematic production mindset. Reduce empty viewings, increase trust, and present every space at its best.",
+                viewPackages: "View packages",
+                stats: [["24h", "Typical delivery"], ["Pro3", "LiDAR scan"], ["DE / EN", "Communication"], ["Germany + EU", "On request"]],
+                servicesTitle: "Services",
+                servicesText: "Core service: Matterport Pro3 3D tours. Optional add-ons: photo, video, drone and location pre-checks.",
+                services: [["Matterport Pro3 3D Tours", "High-accuracy LiDAR-based scanning for residential, commercial and complex spaces."], ["Photo Production", "Clean, high-quality stills for listings, websites and marketing materials."]],
+                whyTitle: "Why Helios",
+                whyText: "Minimal process, premium output.",
+                whyPoints: [["Pro3 LiDAR accuracy", "Precise, reliable measurements."], ["24h delivery", "Fast turnaround."]],
+                samplesTitle: "How does it look?",
+                samplesText: "Open a demo tour to experience navigation.",
+                samplesCta: "View demo",
+                samplesUrl: "https://matterport.com/gallery",
+                industriesTitle: "Industries",
+                industriesText: "From residential to medical and retail.",
+                industries: [["realestate", "Real Estate"], ["commercial", "Commercial"], ["hospitality", "Hotels"]],
+                impactKicker: "BY THE NUMBERS",
+                impactTitle: "Impact of Digital Twins",
+                impactText: "Reported benefits from Matterport users.",
+                impactStats: [["50%", "Less travel"], ["80%", "Better engagement"]],
+                impactNote: "Source: Matterport benchmarks.",
+                packagesTitle: "Packages",
+                packagesText: "Simple pricing.",
+                packages: [["Essential", "from €290", ["Up to 100 m²"]], ["Signature", "from €490", ["Up to 250 m²"]]],
+                larger: "Larger spaces on request.",
+                faqTitle: "FAQ",
+                faq: [["Delivery?", "Within 24 hours."]],
+                contactTitle: "Contact",
+                contactText: "Send us a message.",
+                form: ["Name", "E-mail", "Phone", "Object type", "Address", "Services", "Date", "Comment"],
+                send: "Send request",
+                footer: "All rights reserved."
+            },
+            DE: {
+                brand: "Helios.Virtual",
+                nav: ["Leistungen", "Branchen", "Pakete", "FAQ", "Kontakt"],
+                contactNow: "Jetzt anfragen",
+                heroBadge: "Hamburg • Matterport Pro3 • DE / EN",
+                heroTitle: "Premium 3D-Touren für Räume",
+                heroText: "Wir erstellen schnelle Matterport Pro3 Scans.",
+                viewPackages: "Pakete ansehen",
+                stats: [["24h", "Lieferung"], ["Pro3", "LiDAR-Scan"]],
+                servicesTitle: "Leistungen",
+                servicesText: "Matterport Pro3 3D-Touren.",
+                services: [["3D Touren", "Präzises Scanning."]],
+                whyTitle: "Warum Helios",
+                whyText: "Premium Ergebnisse.",
+                whyPoints: [["Präzision", "LiDAR Maße."]],
+                samplesTitle: "Demo",
+                samplesText: "Erleben Sie eine Tour.",
+                samplesCta: "Demo ansehen",
+                samplesUrl: "https://matterport.com/gallery",
+                industriesTitle: "Branchen",
+                industriesText: "Von Immobilien bis Gewerbe.",
+                industries: [["realestate", "Immobilien"]],
+                impactKicker: "FAKTEN",
+                impactTitle: "Ergebnisse",
+                impactStats: [["50%", "Weniger Anfahrt"]],
+                impactNote: "Hinweis: Matterport Werte.",
+                packagesTitle: "Pakete",
+                packagesText: "Klare Preise.",
+                packages: [["Essential", "ab 290 €", ["Bis 100 m²"]]],
+                larger: "Größere Flächen auf Anfrage.",
+                faqTitle: "FAQ",
+                faq: [["Lieferzeit?", "Innerhalb 24h."]],
+                contactTitle: "Kontakt",
+                contactText: "Schreiben Sie uns.",
+                form: ["Name", "E-Mail", "Telefon", "Objekt", "Adresse", "Leistung", "Datum", "Kommentar"],
+                send: "Senden",
+                footer: "Alle Rechte vorbehalten."
+            }
+        };
+
+        // Упрощенный компонент иконки
+        const IndustryIcon = () => (
+            <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"></path>
+            </svg>
+        );
+
+        function App() {
+            const [lang, setLang] = useState("EN");
+            const t = COPY[lang];
+
+            const scrollToId = (id) => {
+                const el = document.getElementById(id);
+                if (el) window.scrollTo({ top: el.offsetTop - 80, behavior: "smooth" });
+            };
+
+            return (
+                <div className="min-h-screen bg-zinc-950 text-zinc-100 font-sans">
+                    {/* Header */}
+                    <header className="sticky top-0 z-30 border-b border-zinc-800 bg-zinc-950/80 backdrop-blur-md px-4 py-4">
+                        <div className="max-w-7xl mx-auto flex justify-between items-center">
+                            <div className="text-xl font-bold">{t.brand}</div>
+                            <nav className="hidden md:flex gap-6 text-sm">
+                                {t.nav.map((item, i) => (
+                                    <button key={i} className="hover:text-white text-zinc-400">{item}</button>
+                                ))}
+                            </nav>
+                            <div className="flex gap-4 items-center">
+                                <button onClick={() => setLang(lang === "EN" ? "DE" : "EN")} className="text-xs border border-zinc-700 px-2 py-1 rounded">
+                                    {lang}
+                                </button>
+                                <button onClick={() => scrollToId('contact')} className="bg-white text-black px-4 py-2 rounded-xl text-sm font-bold">
+                                    {t.contactNow}
+                                </button>
+                            </div>
+                        </div>
+                    </header>
+
+                    {/* Hero */}
+                    <section className="max-w-7xl mx-auto px-4 py-20 text-center md:text-left grid md:grid-cols-2 gap-10">
+                        <div>
+                            <span className="text-xs border border-zinc-700 px-3 py-1 rounded-full text-zinc-400">{t.heroBadge}</span>
+                            <h1 className="text-4xl md:text-6xl font-bold mt-6 leading-tight">{t.heroTitle}</h1>
+                            <p className="mt-6 text-zinc-400 text-lg max-w-xl">{t.heroText}</p>
+                            <div className="mt-10 flex gap-4 justify-center md:justify-start">
+                                <button onClick={() => scrollToId('contact')} className="bg-white text-black px-6 py-3 rounded-2xl font-bold">{t.contactNow}</button>
+                                <button className="border border-zinc-700 px-6 py-3 rounded-2xl font-bold">{t.viewPackages}</button>
+                            </div>
+                        </div>
+                        <div className="bg-zinc-900 rounded-3xl h-64 md:h-auto border border-zinc-800 flex items-center justify-center">
+                             <p className="text-zinc-600">3D Preview Placeholder</p>
+                        </div>
+                    </section>
+
+                    {/* Contact */}
+                    <section id="contact" className="max-w-4xl mx-auto px-4 py-20">
+                        <div className="bg-zinc-900 p-8 rounded-3xl border border-zinc-800">
+                            <h2 className="text-3xl font-bold">{t.contactTitle}</h2>
+                            <form className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
+                                {t.form.map(f => (
+                                    <input key={f} placeholder={f} className="bg-zinc-950 border border-zinc-800 p-3 rounded-xl outline-none focus:border-white" />
+                                ))}
+                                <button type="button" className="md:col-span-2 bg-white text-black p-4 rounded-xl font-bold mt-4">{t.send}</button>
+                            </form>
+                        </div>
+                    </section>
+
+                    <footer className="py-10 border-t border-zinc-800 text-center text-zinc-500 text-sm">
+                        © 2024 {t.brand}. {t.footer}
+                    </footer>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
