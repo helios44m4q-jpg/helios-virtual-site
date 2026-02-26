@@ -1,37 +1,23 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Helios.Virtual | Premium 3D Tours</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
+    
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <script src="https://unpkg.com/framer-motion@11.0.3/dist/framer-motion.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
+    <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.js"></script>
+
     <style>
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background-color: #09090b; 
-            color: #f4f4f5; 
-            margin: 0;
-            overflow-x: hidden;
-        }
-        /* Стили для эффекта стекла, как в твоем оригинале */
-        .glass { 
-            background: rgba(255, 255, 255, 0.03); 
-            backdrop-filter: blur(12px); 
-            border: 1px solid rgba(255, 255, 255, 0.08); 
-        }
-        .gradient-text {
-            background: linear-gradient(to bottom right, #ffffff 30%, #a1a1aa 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        /* Плавная прокрутка */
         html { scroll-behavior: smooth; }
+        body { margin: 0; background-color: #09090b; color: #f4f4f5; font-family: sans-serif; }
+        /* Прячем контент до загрузки React */
+        #root:empty { display: none; }
     </style>
 </head>
 <body>
@@ -41,288 +27,276 @@
         const { useState, useEffect, useMemo } = React;
         const { motion, AnimatePresence } = window.Motion;
 
-        // Данные из твоего оригинального файла JSX
+        // ТВОЙ ОРИГИНАЛЬНЫЙ КОНТЕНТ (COPY)
         const COPY = {
-            EN: {
-                brand: "Helios.Virtual",
-                nav: ["Services", "Industries", "Packages", "FAQ", "Contact"],
-                contactNow: "Contact now",
-                heroBadge: "Hamburg • Matterport Pro3 • DE / EN",
-                heroTitle: "Premium 3D tours for spaces that need to convert",
-                heroText: "We create fast-turnaround Matterport Pro3 scans with a cinematic production mindset. Reduce empty viewings, increase trust, and present every space at its best.",
-                viewPackages: "View packages",
-                stats: [["24h", "Typical delivery"], ["Pro3", "LiDAR scan"], ["DE / EN", "Communication"], ["Germany + EU", "On request"]],
-                servicesTitle: "Services",
-                servicesText: "Core service: Matterport Pro3 3D tours. Optional add-ons: photo, video, drone and location pre-checks.",
-                services: [
-                    ["Matterport Pro3 3D Tours", "High-accuracy LiDAR-based scanning for residential, commercial and complex spaces."],
-                    ["Photo Production", "Clean, high-quality stills for listings, websites and marketing materials."],
-                    ["Video & Drone", "Short-form social clips or cinematic walkthroughs to capture external context."],
-                    ["Pre-Check / Staging", "On-site preparation guidance to ensure the space looks flawless."]
-                ],
-                whyTitle: "Why Helios",
-                whyText: "Minimal process, premium output.",
-                whyPoints: [
-                    ["Pro3 LiDAR accuracy", "Precise measurements even for large areas."],
-                    ["24h delivery", "Fast turnaround for high-velocity listings."],
-                    ["Production mindset", "We find the best angles to tell a story."],
-                    ["Marketing ready", "Optimized for web and mobile."]
-                ],
-                samplesTitle: "Experience the Quality",
-                samplesText: "Open a demo tour to experience navigation.",
-                samplesCta: "View demo",
-                samplesUrl: "https://matterport.com/gallery",
-                industriesTitle: "Industries",
-                industriesText: "Specialized solutions for every sector.",
-                industries: [["Real Estate", ""], ["Commercial", ""], ["Hospitality", ""], ["Healthcare", ""]],
-                impactKicker: "BY THE NUMBERS",
-                impactTitle: "Impact of Digital Twins",
-                impactStats: [["300%", "Greater engagement"], ["50%", "Less travel"], ["14%", "Faster closing"]],
-                impactNote: "Source: Matterport benchmarks.",
-                packagesTitle: "Packages",
-                packagesText: "Simple pricing.",
-                packages: [
-                    ["Essential", "from €290", ["Up to 100 m²", "Pro3 LiDAR Scan", "1y Hosting"]],
-                    ["Signature", "from €490", ["Up to 250 m²", "Pro3 Scan + Photos", "1y Hosting"]],
-                    ["Portfolio", "Custom", ["Large Scale", "Video Add-on", "Custom Branding"]]
-                ],
-                larger: "Larger spaces on request.",
-                faqTitle: "FAQ",
-                faq: [["Delivery?", "Within 24 hours."], ["Preparation?", "The space should be clean."]],
-                contactTitle: "Contact us",
-                contactText: "Ready to start?",
-                form: ["Name", "E-mail", "Phone", "Type", "Address", "Service", "Date", "Message"],
-                send: "Send request",
-                footer: "All rights reserved."
-            },
-            DE: {
-                brand: "Helios.Virtual",
-                nav: ["Leistungen", "Branchen", "Pakete", "FAQ", "Kontakt"],
-                contactNow: "Jetzt anfragen",
-                heroBadge: "Hamburg • Matterport Pro3 • DE / EN",
-                heroTitle: "Premium 3D-Touren für Räume, die überzeugen",
-                heroText: "Wir erstellen schnelle Matterport Pro3 Scans mit dem Auge einer Kinoproduktion. Weniger Leerstand, mehr Vertrauen.",
-                viewPackages: "Pakete ansehen",
-                stats: [["24h", "Lieferzeit"], ["Pro3", "LiDAR-Scan"], ["DE / EN", "Kommunikation"], ["DE + EU", "Auf Anfrage"]],
-                servicesTitle: "Leistungen",
-                servicesText: "Matterport Pro3 3D-Touren и дополнения.",
-                services: [
-                    ["Matterport Pro3 Touren", "Präzises LiDAR-Scanning für Wohn- und Gewerbeobjekte."],
-                    ["Foto-Produktion", "Hochwertige Standbilder für Exposés."],
-                    ["Video & Drohne", "Kurzclips für Social Media oder Rundgänge."],
-                    ["Pre-Check / Staging", "Beratung für das perfekte Ergebnis."]
-                ],
-                whyTitle: "Warum Helios",
-                whyText: "Minimaler Aufwand, maximales Ergebnis.",
-                whyPoints: [
-                    ["Pro3 Präzision", "Exakte LiDAR-Maße auch außen."],
-                    ["24h Lieferung", "Schnelle Bereitstellung."],
-                    ["Produktions-Fokus", "Wir finden die beste Perspektive."],
-                    ["Marketing-Ready", "Optimiert für Web und Social."]
-                ],
-                samplesTitle: "Qualität erleben",
-                samplesText: "Öffnen Sie eine Demo-Tour.",
-                samplesCta: "Demo ansehen",
-                samplesUrl: "https://matterport.com/gallery",
-                industriesTitle: "Branchen",
-                industriesText: "Lösungen für jeden Sektor.",
-                industries: [["Immobilien", ""], ["Gewerbe", ""], ["Gastgewerbe", ""], ["Medizin", ""]],
-                impactKicker: "FAKTEN",
-                impactTitle: "Ergebnisse",
-                impactStats: [["300%", "Mehr Engagement"], ["50%", "Weniger Besuche"], ["14%", "Schnellerer Abschluss"]],
-                impactNote: "Quelle: Matterport Benchmarks.",
-                packagesTitle: "Pakete",
-                packagesText: "Klare Preise.",
-                packages: [
-                    ["Essential", "ab 290 €", ["Bis 100 m²", "Pro3 Scan", "1J Hosting"]],
-                    ["Signature", "ab 490 €", ["Bis 250 m²", "Pro3 + Fotos", "1J Hosting"]],
-                    ["Portfolio", "Individuell", ["Großprojekte", "Video-Option", "Branding"]]
-                ],
-                larger: "Größere Flächen auf Anfrage.",
-                faqTitle: "FAQ",
-                faq: [["Lieferzeit?", "Innerhalb von 24h."], ["Vorbereitung?", "Objekt sollte sauber sein."]],
-                contactTitle: "Kontakt",
-                contactText: "Projekt starten?",
-                form: ["Name", "E-Mail", "Telefon", "Objekt", "Adresse", "Leistung", "Datum", "Nachricht"],
-                send: "Anfrage senden",
-                footer: "Alle Rechte vorbehalten."
-            }
+          EN: {
+            brand: "Helios.Virtual",
+            nav: ["Services", "Industries", "Packages", "FAQ", "Contact"],
+            contactNow: "Contact now",
+            heroBadge: "Hamburg • Matterport Pro3 • DE / EN",
+            heroTitle: "Premium 3D tours for spaces that need to convert",
+            heroText: "We create fast-turnaround Matterport Pro3 scans with a cinematic production mindset. Reduce empty viewings, increase trust, and present every space at its best.",
+            viewPackages: "View packages",
+            stats: [["24h", "Typical delivery"], ["Pro3", "LiDAR scan"], ["DE / EN", "Communication"], ["Germany + EU", "On request"]],
+            servicesTitle: "Services",
+            servicesText: "Core service: Matterport Pro3 3D tours. Optional add-ons: photo, video, drone and location pre-checks.",
+            services: [
+              ["Matterport Pro3 3D Tours", "High-accuracy LiDAR-based scanning for residential, commercial and complex spaces."],
+              ["Photo Production", "Clean, high-quality stills for listings, websites and marketing materials."],
+              ["Video Production", "Cinematic short-form content for presentations, social and ads."],
+              ["Aerial / Drone", "Context-rich aerial perspectives for property and location storytelling."]
+            ],
+            whyTitle: "Why Helios",
+            whyText: "Minimal process, premium output. We use Matterport Pro3 LiDAR for sharp, measurement-ready digital twins — backed by a cinema-grade production mindset.",
+            whyPoints: [
+              ["Pro3 LiDAR accuracy", "Matterport Pro3 captures high-resolution LiDAR scans for precise, reliable measurements."],
+              ["24h delivery", "Fast turnaround for listings, launches and approvals."],
+              ["Personal approach", "Each object is scoped individually for the best result."],
+              ["Fast communication", "Clear updates, quick answers, predictable workflow."],
+              ["Cinematic mindset", "A film-production approach to craft and presentation."]
+            ],
+            samplesTitle: "How does it look?",
+            samplesText: "Open a demo tour to experience navigation, dollhouse view and measurement tools.",
+            samplesCta: "View demo",
+            samplesUrl: "https://matterport.com/gallery",
+            industriesTitle: "Industries",
+            industriesText: "From residential properties to medical, retail, sports and construction environments — we build 3D tours for nearly any space.",
+            industries: [
+              ["realestate", "Real Estate (apartments & homes)"], ["commercial", "Commercial Properties"], ["hospitality", "Hotels & Hospitality"],
+              ["retail", "Retail (fashion & jewelry)"], ["showroom", "Showrooms & Galleries"], ["auto", "Car Dealerships"],
+              ["culture", "Museums & Art spaces"], ["events", "Exhibitions & venues"], ["architecture", "Architecture (churches & landmarks)"],
+              ["medical", "Medical Clinics"], ["sports", "Sports Facilities"], ["construction", "Construction Progress"],
+              ["offices", "Coworking & Offices"], ["nature", "Nature reserves"]
+            ],
+            impactKicker: "BY THE NUMBERS",
+            impactTitle: "What teams report after adopting digital twins",
+            impactText: "These benchmark outcomes are often cited by Matterport customers. Use a 3D tour to reduce unnecessary visits, align stakeholders faster, and shorten decision cycles.",
+            impactStats: [["50%", "Reduction in travel needs."], ["80%", "Improved engagement."], ["70%", "Reduction in site survey costs and BIM file creation."], ["75%", "Of project issues resolved without escalation."]],
+            impactNote: "Note: figures shown are benchmark claims published by Matterport; actual results vary by project and workflow.",
+            packagesTitle: "Packages",
+            packagesText: "Simple pricing based on square meters and hosting period.",
+            packages: [
+              ["Essential Space", "from €290", ["Up to 100 m²", "Matterport Pro3 scan + processing", "3 months hosting"]],
+              ["Signature Space", "from €490", ["Up to 250 m²", "Matterport Pro3 scan + enhanced processing", "6 months hosting"]],
+              ["Portfolio Space", "from €890", ["Up to 500 m²", "Matterport Pro3 scan + advanced polish", "12 months hosting"]]
+            ],
+            larger: "Larger spaces or extra needs (photo / video / drone) — we’ll create a tailored quote.",
+            faqTitle: "FAQ",
+            faq: [
+              ["How fast is delivery?", "Most projects are delivered within 24 hours, depending on scope."],
+              ["Is hosting included?", "Yes — packages include hosting for 3, 6 or 12 months."],
+              ["Do you work only in Hamburg?", "Hamburg is our base. Germany and EU projects are available on request."],
+              ["What is the booking policy?", "50% prepayment secures the date. One reschedule is possible with advance notice."]
+            ],
+            contactTitle: "Contact",
+            contactText: "Send object type, size, address and desired date — we’ll reply with a clear quote.",
+            form: ["Name", "E-mail", "Phone", "Object type", "Address", "Required services", "Preferred shooting date", "Comment"],
+            send: "Send request",
+            footer: "All rights reserved."
+          },
+          DE: {
+            brand: "Helios.Virtual",
+            nav: ["Leistungen", "Branchen", "Pakete", "FAQ", "Kontakt"],
+            contactNow: "Jetzt anfragen",
+            heroBadge: "Hamburg • Matterport Pro3 • DE / EN",
+            heroTitle: "Premium 3D-Touren für Räume, die überzeugen müssen",
+            heroText: "Wir erstellen schnelle Matterport Pro3 Scans mit cineastischem Produktionsansatz. Weniger leere Besichtigungen, mehr Vertrauen und eine stärkere Präsentation Ihres Objekts.",
+            viewPackages: "Pakete ansehen",
+            stats: [["24h", "Typische Lieferung"], ["Pro3", "LiDAR-Scan"], ["DE / EN", "Kommunikation"], ["Deutschland + EU", "auf Anfrage"]],
+            servicesTitle: "Leistungen",
+            servicesText: "Kernleistung: Matterport Pro3 3D-Touren. Optional: Foto, Video, Drohne und Location-Precheck.",
+            services: [
+              ["Matterport Pro3 3D-Touren", "Präzises LiDAR-Scanning für Wohn-, Gewerbe- и komplexe Flächen."],
+              ["Foto-Produktion", "Hochwertige Fotos für Exposés, Webseiten und Marketing."],
+              ["Video-Produktion", "Cineastische Kurzformate für Präsentation, Social und Ads."],
+              ["Drohnenaufnahmen", "Aussagekräftige Luftperspektiven für Lage und Umfeld."]
+            ],
+            whyTitle: "Warum Helios",
+            whyText: "Minimaler Prozess, Premium-Ergebnis. Wir nutzen Matterport Pro3 LiDAR for messgenaue, hochauflösende digitale Zwillingе — mit cineastischem Produktionsansatz.",
+            whyPoints: [
+              ["Pro3 LiDAR-Präzision", "Matterport Pro3 erstellt hochauflösende LiDAR-Scans für präzise, zuverlässige Maße."],
+              ["Lieferung in 24h", "Schnelle Abgabe für Exposé, Launch und Freigaben."],
+              ["Individueller Ansatz", "Jedes Objekt wird passend gescoped — für das beste Ergebnis."],
+              ["Schnelle Kommunikation", "Klare Updates, schnelle Antworten, planbarer Ablauf."],
+              ["Cinematic Mindset", "Filmproduktions-Ansatz für Look, Qualität und Präsentation."]
+            ],
+            samplesTitle: "Wie sieht das aus?",
+            samplesText: "Öffnen Sie eine Demo-Tour und erleben Sie Navigation, Dollhouse-Ansicht und Messfunktionen.",
+            samplesCta: "Demo ansehen",
+            samplesUrl: "https://matterport.com/gallery",
+            industriesTitle: "Branchen",
+            industriesText: "Von Wohnimmobilien bis Medizin, Retail, Sport und Baufortschritt — wir erstellen 3D-Touren für nahezu jede Art von Fläche.",
+            industries: [
+              ["realestate", "Immobilien (Wohnungen & Häuser)"], ["commercial", "Gewerbeimmobilien"], ["hospitality", "Hotels & Hospitality"],
+              ["retail", "Einzelhandel (Mode & Schmuck)"], ["showroom", "Showrooms & Galerien"], ["auto", "Autohäuser"],
+              ["culture", "Museums & Art-Spaces"], ["events", "Messen & Locations"], ["architecture", "Architektur (Kirchen & Sehenswürdigkeiten)"],
+              ["medical", "Kliniken & Praxen"], ["sports", "Sportanlagen"], ["construction", "Baufortschritt"],
+              ["offices", "Coworking & Büros"], ["nature", "Naturschutz & Natur"]
+            ],
+            impactKicker: "ZAHLEN & FAKTEN",
+            impactTitle: "Was Teams nach dem Einsatz digitaler Zwillingе berichten",
+            impactText: "Diese Benchmark-Werte werden häufig von Matterport-Kunden genannt. 3D-Touren reduzieren unnötige Vor-Ort-Termine, beschleunigen Abstimmungen und verkürzen Entscheidungswege.",
+            impactStats: [["50%", "Weniger Reise-/Anfahrtsbedarf."], ["80%", "Höheres Engagement."], ["70%", "Weniger Kosten für Site-Surveys und BIM-Erstellung."], ["75%", "Projektprobleme ohne Eskalation gelöst."]],
+            impactNote: "Hinweis: Werte sind Benchmark-Aussagen von Matterport; tatsächliche Ergebnisse variieren je nach Projekt und workflow.",
+            packagesTitle: "Pakete",
+            packagesText: "Transparente Preise nach Quadratmetern und Hosting-Laufzeit.",
+            packages: [
+              ["Essential Space", "ab 290 €", ["Bis 100 m²", "Matterport Pro3 Scan + Processing", "3 Monate Hosting"]],
+              ["Signature Space", "ab 490 €", ["Bis 250 m²", "Matterport Pro3 Scan + Enhanced Processing", "6 Monate Hosting"]],
+              ["Portfolio Space", "ab 890 €", ["Bis 500 m²", "Matterport Pro3 Scan + Advanced Polish", "12 Monate Hosting"]]
+            ],
+            larger: "Größere Flächen oder Zusatzleistungen (Foto / Video / Drohne) — wir erstellen ein individuelles Angebot.",
+            faqTitle: "FAQ",
+            faq: [
+              ["Wie schnell ist die Lieferung?", "Die meisten Projekte liefern wir je nach Umfang innerhalb von 24 Stunden."],
+              ["Ist Hosting enthalten?", "Ja — je nach Paket 3, 6 или 12 Monate."],
+              ["Arbeitet ihr nur in Hamburg?", "Hamburg ist unsere Basis. Projekte in Deutschland und der EU auf Anfrage."],
+              ["Wie läuft die Buchung?", "50% Anzahlung sichern den Termin. Eine Umbuchung ist mit Vorlauf möglich."]
+            ],
+            contactTitle: "Kontakt",
+            contactText: "Senden Sie Objektart, Größe, Adresse und Wunschdatum — wir antworten mit einem klaren Angebot.",
+            form: ["Name", "E-Mail", "Telefon", "Objektart", "Adresse", "Benötigte Leistungen", "Gewünschtes Aufnahmedatum", "Kommentar"],
+            send: "Anfrage senden",
+            footer: "Alle Rechte vorbehalten."
+          }
+        };
+
+        const IndustryIcon = ({ name }) => {
+            return (
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className="text-zinc-200">
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M12 8v8M8 12h8" />
+                </svg>
+            );
         };
 
         function App() {
-            const [lang, setLang] = useState("DE");
-            const [isScrolled, setIsScrolled] = useState(false);
-            const t = COPY[lang];
+            const [lang, setLang] = useState("EN");
+            const [activeSection, setActiveSection] = useState("top");
+            const [showPreloader, setShowPreloader] = useState(true);
+            const [tilt, setTilt] = useState({ x: 0, y: 0 });
 
             useEffect(() => {
-                const handleScroll = () => setIsScrolled(window.scrollY > 20);
-                window.addEventListener("scroll", handleScroll);
-                return () => window.removeEventListener("scroll", handleScroll);
+                const timer = setTimeout(() => setShowPreloader(false), 800);
+                const onMove = (e) => {
+                    const nx = (e.clientX / window.innerWidth - 0.5) * 2;
+                    const ny = (e.clientY / window.innerHeight - 0.5) * 2;
+                    setTilt({ x: nx, y: ny });
+                };
+                window.addEventListener("mousemove", onMove);
+                return () => { clearTimeout(timer); window.removeEventListener("mousemove", onMove); };
             }, []);
 
-            const scrollTo = (id) => {
+            const t = useMemo(() => COPY[lang], [lang]);
+
+            const scrollToId = (id) => {
                 const el = document.getElementById(id);
-                if (el) window.scrollTo({ top: el.offsetTop - 80, behavior: 'smooth' });
+                if (el) {
+                    const y = el.getBoundingClientRect().top + window.scrollY - 88;
+                    window.scrollTo({ top: y, behavior: "smooth" });
+                }
             };
 
             return (
-                <div className="min-h-screen">
-                    {/* Header */}
-                    <header className={`fixed top-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'py-4 glass border-b border-white/10' : 'py-8'}`}>
-                        <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
-                            <div className="text-xl font-bold tracking-tighter uppercase">{t.brand}</div>
-                            
-                            <nav className="hidden md:flex gap-8 text-[13px] font-medium text-zinc-400">
-                                {t.nav.map((item) => (
-                                    <button key={item} onClick={() => scrollTo(item.toLowerCase())} className="hover:text-white transition-colors uppercase tracking-widest">{item}</button>
+                <div className="min-h-screen bg-zinc-950 text-zinc-100 font-sans selection:bg-white selection:text-black">
+                    <AnimatePresence>
+                        {showPreloader && (
+                            <motion.div exit={{ opacity: 0 }} className="fixed inset-0 z-[999] flex items-center justify-center bg-zinc-950">
+                                <div className="text-xl font-semibold tracking-tight">Helios.Virtual</div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+
+                    <header className="sticky top-0 z-30 border-b border-zinc-800/80 bg-zinc-950/85 backdrop-blur">
+                        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 md:px-8">
+                            <button onClick={() => scrollToId("top")} className="text-lg font-semibold">{t.brand}</button>
+                            <nav className="hidden items-center gap-6 text-sm md:flex">
+                                {t.nav.map((item, i) => (
+                                    <button key={i} onClick={() => scrollToId(item.toLowerCase())} className="text-zinc-400 hover:text-white transition-colors">{item}</button>
                                 ))}
                             </nav>
-
-                            <div className="flex gap-4 items-center">
-                                <button onClick={() => setLang(lang === "EN" ? "DE" : "EN")} className="text-[11px] font-bold border border-zinc-800 px-3 py-1 rounded-full hover:bg-zinc-800 transition-colors">
-                                    {lang}
-                                </button>
-                                <button onClick={() => scrollTo('contact')} className="bg-white text-black px-6 py-2.5 rounded-full text-xs font-bold hover:bg-zinc-200 transition-all">
-                                    {t.contactNow}
-                                </button>
+                            <div className="flex items-center gap-4">
+                                <div className="flex bg-zinc-900 rounded-full p-1 border border-zinc-800 text-xs font-bold">
+                                    <button onClick={() => setLang("EN")} className={`px-3 py-1 rounded-full ${lang === 'EN' ? 'bg-white text-black' : 'text-zinc-400'}`}>EN</button>
+                                    <button onClick={() => setLang("DE")} className={`px-3 py-1 rounded-full ${lang === 'DE' ? 'bg-white text-black' : 'text-zinc-400'}`}>DE</button>
+                                </div>
+                                <button onClick={() => scrollToId("contact")} className="bg-white text-black px-4 py-2 rounded-xl text-sm font-bold hover:bg-zinc-200 transition-all">{t.contactNow}</button>
                             </div>
                         </div>
                     </header>
 
-                    {/* Hero */}
-                    <section className="pt-48 pb-32 px-6">
-                        <div className="max-w-7xl mx-auto">
-                            <motion.div 
-                                initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
-                                className="inline-block glass px-4 py-1.5 rounded-full text-[10px] font-bold tracking-[0.2em] text-zinc-400 uppercase mb-8"
-                            >
-                                {t.heroBadge}
+                    <main>
+                        <section id="top" className="mx-auto max-w-7xl px-4 py-20 md:px-8 grid md:grid-cols-2 gap-12 items-center">
+                            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+                                <span className="border border-zinc-800 px-3 py-1 rounded-full text-xs text-zinc-400 mb-6 inline-block">{t.heroBadge}</span>
+                                <h1 className="text-4xl md:text-6xl font-bold leading-tight mb-6">{t.heroTitle}</h1>
+                                <p className="text-zinc-400 text-lg mb-8 max-w-lg">{t.heroText}</p>
+                                <div className="flex gap-4">
+                                    <button onClick={() => scrollToId("contact")} className="bg-white text-black px-6 py-3 rounded-2xl font-bold">{t.contactNow}</button>
+                                    <button onClick={() => scrollToId("packages")} className="border border-zinc-800 px-6 py-3 rounded-2xl font-bold hover:bg-zinc-900">{t.viewPackages}</button>
+                                </div>
                             </motion.div>
-                            
-                            <motion.h1 
-                                initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
-                                className="text-5xl md:text-8xl font-bold leading-[0.9] tracking-tighter mb-10 gradient-text"
-                            >
-                                {t.heroTitle}
-                            </motion.h1>
-
-                            <motion.p 
-                                initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
-                                className="text-lg md:text-xl text-zinc-400 max-w-2xl mb-12 leading-relaxed"
-                            >
-                                {t.heroText}
-                            </motion.p>
-
-                            <div className="flex flex-wrap gap-4 mb-24">
-                                <button onClick={() => scrollTo('contact')} className="bg-white text-black px-10 py-5 rounded-2xl font-bold text-base hover:scale-[1.02] transition-transform">
-                                    {t.contactNow}
-                                </button>
-                                <button onClick={() => scrollTo('packages')} className="glass px-10 py-5 rounded-2xl font-bold text-base hover:bg-white/5 transition-colors">
-                                    {t.viewPackages}
-                                </button>
+                            <div className="relative aspect-video bg-zinc-900 rounded-3xl border border-zinc-800 overflow-hidden shadow-2xl group">
+                                <div className="absolute inset-0 flex items-center justify-center text-zinc-600 italic">3D Tour Interactive Preview</div>
+                                <div className="absolute bottom-4 left-4 right-4 bg-black/40 backdrop-blur p-4 rounded-2xl border border-white/5">
+                                   <div className="text-xs font-bold text-white uppercase tracking-widest opacity-60">Matterport Pro3</div>
+                                </div>
                             </div>
+                        </section>
 
-                            <div className="grid grid-cols-2 md:grid-cols-4 gap-12 pt-12 border-t border-white/5">
-                                {t.stats.map(([val, label], i) => (
-                                    <div key={i}>
-                                        <div className="text-3xl font-bold mb-1 tracking-tighter">{val}</div>
-                                        <div className="text-[11px] uppercase tracking-widest text-zinc-500 font-medium">{label}</div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    </section>
+                        <section id="services" className="bg-zinc-900/50 py-20 border-y border-zinc-800">
+                           <div className="mx-auto max-w-7xl px-4 md:px-8">
+                                <h2 className="text-3xl font-bold mb-10">{t.servicesTitle}</h2>
+                                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                                    {t.services.map(([title, desc], i) => (
+                                        <div key={i} className="bg-zinc-950 border border-zinc-800 p-6 rounded-3xl hover:border-zinc-700 transition-all">
+                                            <h3 className="font-bold mb-3">{title}</h3>
+                                            <p className="text-zinc-400 text-sm leading-relaxed">{desc}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                           </div>
+                        </section>
 
-                    {/* Services */}
-                    <section id="services" className="py-32 px-6 bg-[#0c0c0e]">
-                        <div className="max-w-7xl mx-auto">
-                            <div className="mb-20">
-                                <h2 className="text-4xl font-bold tracking-tight mb-4">{t.servicesTitle}</h2>
-                                <p className="text-zinc-500 max-w-xl">{t.servicesText}</p>
-                            </div>
-                            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-                                {t.services.map(([title, desc], i) => (
-                                    <div key={i} className="p-10 glass rounded-[2.5rem] hover:bg-white/[0.05] transition-all group">
-                                        <div className="w-10 h-10 bg-white/5 rounded-full flex items-center justify-center mb-8 group-hover:bg-white group-hover:text-black transition-colors font-bold">0{i+1}</div>
-                                        <h3 className="text-lg font-bold mb-4">{title}</h3>
-                                        <p className="text-sm text-zinc-500 leading-relaxed">{desc}</p>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    </section>
-
-                    {/* Impact Section */}
-                    <section className="py-32 px-6 bg-white text-black">
-                        <div className="max-w-7xl mx-auto">
-                            <div className="text-center mb-24">
-                                <span className="text-[10px] font-black tracking-[0.3em] uppercase opacity-40">{t.impactKicker}</span>
-                                <h2 className="text-5xl md:text-7xl font-bold mt-6 tracking-tighter">{t.impactTitle}</h2>
-                            </div>
-                            <div className="grid md:grid-cols-3 gap-20 text-center">
-                                {t.impactStats.map(([val, label], i) => (
-                                    <div key={i}>
-                                        <div className="text-7xl md:text-8xl font-black mb-4 tracking-tighter italic">-{val}</div>
-                                        <div className="text-sm font-bold uppercase tracking-widest opacity-60">{label}</div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    </section>
-
-                    {/* Packages */}
-                    <section id="packages" className="py-32 px-6">
-                        <div className="max-w-7xl mx-auto">
-                            <h2 className="text-4xl font-bold tracking-tight mb-16 text-center">{t.packagesTitle}</h2>
-                            <div className="grid md:grid-cols-3 gap-6">
-                                {t.packages.map(([name, price, features], i) => (
-                                    <div key={i} className={`p-10 rounded-[3rem] ${i === 1 ? 'bg-zinc-100 text-black' : 'glass'}`}>
-                                        <h3 className="text-xl font-bold mb-2 tracking-tight">{name}</h3>
-                                        <div className="text-4xl font-black mb-10 tracking-tighter">{price}</div>
-                                        <ul className="space-y-5 mb-12">
-                                            {features.map(f => (
-                                                <li key={f} className="text-sm font-medium flex items-center gap-3">
-                                                    <span className={`w-1.5 h-1.5 rounded-full ${i === 1 ? 'bg-black/20' : 'bg-white/20'}`}></span>
-                                                    {f}
-                                                </li>
-                                            ))}
+                        <section id="packages" className="py-20 mx-auto max-w-7xl px-4 md:px-8">
+                             <h2 className="text-3xl font-bold mb-4">{t.packagesTitle}</h2>
+                             <p className="text-zinc-400 mb-10">{t.packagesText}</p>
+                             <div className="grid lg:grid-cols-3 gap-8">
+                                {t.packages.map(([name, price, items], i) => (
+                                    <div key={i} className={`p-8 rounded-3xl border transition-all ${i === 1 ? 'bg-white text-black border-white' : 'bg-zinc-900 border-zinc-800'}`}>
+                                        <div className="text-sm font-bold opacity-60 mb-2">{name}</div>
+                                        <div className="text-3xl font-black mb-6">{price}</div>
+                                        <ul className="space-y-3 mb-8">
+                                            {items.map((item, j) => <li key={j} className="text-sm">• {item}</li>)}
                                         </ul>
-                                        <button onClick={() => scrollTo('contact')} className={`w-full py-5 rounded-2xl font-bold text-sm transition-all ${i === 1 ? 'bg-black text-white hover:opacity-90' : 'bg-white text-black hover:bg-zinc-200'}`}>
-                                            Get Started
-                                        </button>
+                                        <button className={`w-full py-3 rounded-2xl font-bold ${i === 1 ? 'bg-black text-white' : 'bg-white text-black'}`}>{t.contactNow}</button>
                                     </div>
                                 ))}
-                            </div>
-                        </div>
-                    </section>
+                             </div>
+                        </section>
 
-                    {/* Contact Form */}
-                    <section id="contact" className="py-32 px-6 mb-20">
-                        <div className="max-w-4xl mx-auto glass p-12 md:p-16 rounded-[4rem]">
-                            <h2 className="text-4xl font-bold tracking-tighter mb-4">{t.contactTitle}</h2>
-                            <p className="text-zinc-500 mb-12">{t.contactText}</p>
-                            <form className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                {t.form.map((label, i) => (
-                                    <div key={i} className={i === 7 ? "md:col-span-2" : ""}>
-                                        <label className="text-[10px] font-bold uppercase tracking-widest text-zinc-600 mb-2 block ml-2">{label}</label>
-                                        {i === 7 ? (
-                                            <textarea className="w-full bg-zinc-950/50 border border-white/5 rounded-2xl p-5 outline-none focus:border-white/20 transition-colors text-sm" rows="5" />
-                                        ) : (
-                                            <input className="w-full bg-zinc-950/50 border border-white/5 rounded-2xl p-5 outline-none focus:border-white/20 transition-colors text-sm" type="text" />
-                                        )}
+                        <section id="contact" className="py-20 border-t border-zinc-800">
+                             <div className="mx-auto max-w-7xl px-4 md:px-8 grid md:grid-cols-2 gap-12">
+                                <div>
+                                    <h2 className="text-3xl font-bold mb-6">{t.contactTitle}</h2>
+                                    <p className="text-zinc-400 mb-8">{t.contactText}</p>
+                                    <div className="space-y-4 text-zinc-300">
+                                        <p><strong>Email:</strong> hello@helios-virtual.de</p>
+                                        <p><strong>Location:</strong> Hamburg, Germany</p>
                                     </div>
-                                ))}
-                                <button type="button" className="md:col-span-2 bg-white text-black py-6 rounded-2xl font-black uppercase tracking-[0.2em] text-xs mt-6 hover:scale-[1.01] transition-transform">
-                                    {t.send}
-                                </button>
-                            </form>
-                        </div>
-                    </section>
+                                </div>
+                                <form className="bg-zinc-900 p-8 rounded-3xl border border-zinc-800 space-y-4">
+                                    <input placeholder={t.form[0]} className="w-full bg-zinc-950 border border-zinc-800 p-4 rounded-xl outline-none focus:border-white transition-all" />
+                                    <input placeholder={t.form[1]} className="w-full bg-zinc-950 border border-zinc-800 p-4 rounded-xl outline-none focus:border-white transition-all" />
+                                    <textarea placeholder={t.form[7]} rows="4" className="w-full bg-zinc-950 border border-zinc-800 p-4 rounded-xl outline-none focus:border-white transition-all"></textarea>
+                                    <button type="button" className="w-full bg-white text-black py-4 rounded-2xl font-bold hover:scale-[1.02] active:scale-95 transition-all">{t.send}</button>
+                                </form>
+                             </div>
+                        </section>
+                    </main>
 
-                    <footer className="py-20 border-t border-white/5 text-center">
-                        <div className="text-xs font-bold tracking-[0.4em] text-zinc-700 uppercase">
-                            © {new Date().getFullYear()} {t.brand} • {t.footer}
-                        </div>
+                    <footer className="py-10 text-center border-t border-zinc-900 text-zinc-600 text-xs">
+                        © {new Date().getFullYear()} Helios.Virtual. {t.footer}
                     </footer>
                 </div>
             );
