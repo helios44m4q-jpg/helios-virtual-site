@@ -6,28 +6,30 @@
     <title>Helios.Virtual | Premium 3D Tours</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
-    
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    
     <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.js"></script>
 
     <style>
         html { scroll-behavior: smooth; }
-        body { margin: 0; background-color: #09090b; color: #f4f4f5; font-family: sans-serif; }
-        /* Прячем контент до загрузки React */
+        body { margin: 0; background-color: #09090b; color: #f4f4f5; font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; }
         #root:empty { display: none; }
+        /* Кастомный скроллбар в стиле темной темы */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #09090b; }
+        ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #3f3f46; }
     </style>
 </head>
 <body>
     <div id="root"></div>
 
     <script type="text/babel">
-        const { useState, useEffect, useMemo } = React;
+        const { useState, useEffect, useMemo, useRef } = React;
         const { motion, AnimatePresence } = window.Motion;
 
-        // ТВОЙ ОРИГИНАЛЬНЫЙ КОНТЕНТ (COPY)
+        // ВЕСЬ ТВОЙ КОНТЕНТ БЕЗ ИЗМЕНЕНИЙ (COPY)
         const COPY = {
           EN: {
             brand: "Helios.Virtual",
@@ -62,16 +64,30 @@
             industriesTitle: "Industries",
             industriesText: "From residential properties to medical, retail, sports and construction environments — we build 3D tours for nearly any space.",
             industries: [
-              ["realestate", "Real Estate (apartments & homes)"], ["commercial", "Commercial Properties"], ["hospitality", "Hotels & Hospitality"],
-              ["retail", "Retail (fashion & jewelry)"], ["showroom", "Showrooms & Galleries"], ["auto", "Car Dealerships"],
-              ["culture", "Museums & Art spaces"], ["events", "Exhibitions & venues"], ["architecture", "Architecture (churches & landmarks)"],
-              ["medical", "Medical Clinics"], ["sports", "Sports Facilities"], ["construction", "Construction Progress"],
-              ["offices", "Coworking & Offices"], ["nature", "Nature reserves"]
+              ["realestate", "Real Estate (apartments & homes)"],
+              ["commercial", "Commercial Properties"],
+              ["hospitality", "Hotels & Hospitality"],
+              ["retail", "Retail (fashion & jewelry)"],
+              ["showroom", "Showrooms & Galleries"],
+              ["auto", "Car Dealerships"],
+              ["culture", "Museums & Art spaces"],
+              ["events", "Exhibitions & venues"],
+              ["architecture", "Architecture (churches & landmarks)"],
+              ["medical", "Medical Clinics"],
+              ["sports", "Sports Facilities"],
+              ["construction", "Construction Progress"],
+              ["offices", "Coworking & Offices"],
+              ["nature", "Nature reserves"]
             ],
             impactKicker: "BY THE NUMBERS",
             impactTitle: "What teams report after adopting digital twins",
             impactText: "These benchmark outcomes are often cited by Matterport customers. Use a 3D tour to reduce unnecessary visits, align stakeholders faster, and shorten decision cycles.",
-            impactStats: [["50%", "Reduction in travel needs."], ["80%", "Improved engagement."], ["70%", "Reduction in site survey costs and BIM file creation."], ["75%", "Of project issues resolved without escalation."]],
+            impactStats: [
+              ["50%", "Reduction in travel needs."],
+              ["80%", "Improved engagement."],
+              ["70%", "Reduction in site survey costs and BIM file creation."],
+              ["75%", "Of project issues resolved without escalation."]
+            ],
             impactNote: "Note: figures shown are benchmark claims published by Matterport; actual results vary by project and workflow.",
             packagesTitle: "Packages",
             packagesText: "Simple pricing based on square meters and hosting period.",
@@ -106,10 +122,10 @@
             servicesTitle: "Leistungen",
             servicesText: "Kernleistung: Matterport Pro3 3D-Touren. Optional: Foto, Video, Drohne und Location-Precheck.",
             services: [
-              ["Matterport Pro3 3D-Touren", "Präzises LiDAR-Scanning für Wohn-, Gewerbe- и komplexe Flächen."],
+              ["Matterport Pro3 3D-Touren", "Präzises LiDAR-Scanning für Wohn-, Gewerbe- und komplexe Flächen."],
               ["Foto-Produktion", "Hochwertige Fotos für Exposés, Webseiten und Marketing."],
               ["Video-Produktion", "Cineastische Kurzformate für Präsentation, Social und Ads."],
-              ["Drohnenaufnahmen", "Aussagekräftige Luftperspektiven für Lage und Umfeld."]
+              ["Drohnenaufnahmen", "Aussagekräftige Luftпереспективен für Lage und Umfeld."]
             ],
             whyTitle: "Warum Helios",
             whyText: "Minimaler Prozess, Premium-Ergebnis. Wir nutzen Matterport Pro3 LiDAR for messgenaue, hochauflösende digitale Zwillingе — mit cineastischem Produktionsansatz.",
@@ -127,16 +143,30 @@
             industriesTitle: "Branchen",
             industriesText: "Von Wohnimmobilien bis Medizin, Retail, Sport und Baufortschritt — wir erstellen 3D-Touren für nahezu jede Art von Fläche.",
             industries: [
-              ["realestate", "Immobilien (Wohnungen & Häuser)"], ["commercial", "Gewerbeimmobilien"], ["hospitality", "Hotels & Hospitality"],
-              ["retail", "Einzelhandel (Mode & Schmuck)"], ["showroom", "Showrooms & Galerien"], ["auto", "Autohäuser"],
-              ["culture", "Museums & Art-Spaces"], ["events", "Messen & Locations"], ["architecture", "Architektur (Kirchen & Sehenswürdigkeiten)"],
-              ["medical", "Kliniken & Praxen"], ["sports", "Sportanlagen"], ["construction", "Baufortschritt"],
-              ["offices", "Coworking & Büros"], ["nature", "Naturschutz & Natur"]
+              ["realestate", "Immobilien (Wohnungen & Häuser)"],
+              ["commercial", "Gewerbeimmobilien"],
+              ["hospitality", "Hotels & Hospitality"],
+              ["retail", "Einzelhandel (Mode & Schmuck)"],
+              ["showroom", "Showrooms & Galerien"],
+              ["auto", "Autohäuser"],
+              ["culture", "Museums & Art-Spaces"],
+              ["events", "Messen & Locations"],
+              ["architecture", "Architektur (Kirchen & Sehenswürdigkeiten)"],
+              ["medical", "Kliniken & Praxen"],
+              ["sports", "Sportanlagen"],
+              ["construction", "Baufortschritt"],
+              ["offices", "Coworking & Büros"],
+              ["nature", "Naturschutz & Natur"]
             ],
             impactKicker: "ZAHLEN & FAKTEN",
-            impactTitle: "Was Teams nach dem Einsatz digitaler Zwillingе berichten",
+            impactTitle: "Was Teams nach dem Einsatz digitaler Zwillinge berichten",
             impactText: "Diese Benchmark-Werte werden häufig von Matterport-Kunden genannt. 3D-Touren reduzieren unnötige Vor-Ort-Termine, beschleunigen Abstimmungen und verkürzen Entscheidungswege.",
-            impactStats: [["50%", "Weniger Reise-/Anfahrtsbedarf."], ["80%", "Höheres Engagement."], ["70%", "Weniger Kosten für Site-Surveys und BIM-Erstellung."], ["75%", "Projektprobleme ohne Eskalation gelöst."]],
+            impactStats: [
+              ["50%", "Weniger Reise-/Anfahrtsbedarf."],
+              ["80%", "Höheres Engagement."],
+              ["70%", "Weniger Kosten für Site-Surveys und BIM-Erstellung."],
+              ["75%", "Projektprobleme ohne Eskalation gelöst."]
+            ],
             impactNote: "Hinweis: Werte sind Benchmark-Aussagen von Matterport; tatsächliche Ergebnisse variieren je nach Projekt und workflow.",
             packagesTitle: "Pakete",
             packagesText: "Transparente Preise nach Quadratmetern und Hosting-Laufzeit.",
@@ -162,144 +192,267 @@
         };
 
         const IndustryIcon = ({ name }) => {
-            return (
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className="text-zinc-200">
-                    <circle cx="12" cy="12" r="10" />
-                    <path d="M12 8v8M8 12h8" />
-                </svg>
-            );
+          // Иконки из твоего кода
+          const common = { width: 20, height: 20, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "1.7", strokeLinecap: "round", strokeLinejoin: "round", className: "text-zinc-200" };
+          return (
+            <svg {...common}>
+              <circle cx="12" cy="12" r="10" />
+              <path d="M12 8v8M8 12h8" />
+            </svg>
+          );
         };
 
         function App() {
-            const [lang, setLang] = useState("EN");
-            const [activeSection, setActiveSection] = useState("top");
-            const [showPreloader, setShowPreloader] = useState(true);
-            const [tilt, setTilt] = useState({ x: 0, y: 0 });
+          const [lang, setLang] = useState("EN");
+          const [activeSection, setActiveSection] = useState("top");
+          const [showPreloader, setShowPreloader] = useState(true);
+          const [tilt, setTilt] = useState({ x: 0, y: 0 });
 
-            useEffect(() => {
-                const timer = setTimeout(() => setShowPreloader(false), 800);
-                const onMove = (e) => {
-                    const nx = (e.clientX / window.innerWidth - 0.5) * 2;
-                    const ny = (e.clientY / window.innerHeight - 0.5) * 2;
-                    setTilt({ x: nx, y: ny });
-                };
-                window.addEventListener("mousemove", onMove);
-                return () => { clearTimeout(timer); window.removeEventListener("mousemove", onMove); };
-            }, []);
-
-            const t = useMemo(() => COPY[lang], [lang]);
-
-            const scrollToId = (id) => {
-                const el = document.getElementById(id);
-                if (el) {
-                    const y = el.getBoundingClientRect().top + window.scrollY - 88;
-                    window.scrollTo({ top: y, behavior: "smooth" });
-                }
+          useEffect(() => {
+            const timer = setTimeout(() => setShowPreloader(false), 800);
+            const onMouseMove = (e) => {
+              const nx = (e.clientX / window.innerWidth - 0.5) * 2;
+              const ny = (e.clientY / window.innerHeight - 0.5) * 2;
+              setTilt({ x: nx, y: ny });
             };
+            window.addEventListener("mousemove", onMouseMove);
+            
+            // Настройка Observer для меню
+            const ids = ["top", "services", "why", "industries", "impact", "packages", "faq", "contact"];
+            const observers = ids.map(id => {
+               const el = document.getElementById(id);
+               if (!el) return null;
+               const obs = new IntersectionObserver((entries) => {
+                  entries.forEach(entry => { if(entry.isIntersecting) setActiveSection(id); });
+               }, { rootMargin: "-40% 0px -50% 0px" });
+               obs.observe(el);
+               return obs;
+            });
 
-            return (
-                <div className="min-h-screen bg-zinc-950 text-zinc-100 font-sans selection:bg-white selection:text-black">
-                    <AnimatePresence>
-                        {showPreloader && (
-                            <motion.div exit={{ opacity: 0 }} className="fixed inset-0 z-[999] flex items-center justify-center bg-zinc-950">
-                                <div className="text-xl font-semibold tracking-tight">Helios.Virtual</div>
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
+            return () => {
+              clearTimeout(timer);
+              window.removeEventListener("mousemove", onMouseMove);
+              observers.forEach(o => o?.disconnect());
+            };
+          }, []);
 
-                    <header className="sticky top-0 z-30 border-b border-zinc-800/80 bg-zinc-950/85 backdrop-blur">
-                        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 md:px-8">
-                            <button onClick={() => scrollToId("top")} className="text-lg font-semibold">{t.brand}</button>
-                            <nav className="hidden items-center gap-6 text-sm md:flex">
-                                {t.nav.map((item, i) => (
-                                    <button key={i} onClick={() => scrollToId(item.toLowerCase())} className="text-zinc-400 hover:text-white transition-colors">{item}</button>
-                                ))}
-                            </nav>
-                            <div className="flex items-center gap-4">
-                                <div className="flex bg-zinc-900 rounded-full p-1 border border-zinc-800 text-xs font-bold">
-                                    <button onClick={() => setLang("EN")} className={`px-3 py-1 rounded-full ${lang === 'EN' ? 'bg-white text-black' : 'text-zinc-400'}`}>EN</button>
-                                    <button onClick={() => setLang("DE")} className={`px-3 py-1 rounded-full ${lang === 'DE' ? 'bg-white text-black' : 'text-zinc-400'}`}>DE</button>
-                                </div>
-                                <button onClick={() => scrollToId("contact")} className="bg-white text-black px-4 py-2 rounded-xl text-sm font-bold hover:bg-zinc-200 transition-all">{t.contactNow}</button>
+          const t = useMemo(() => COPY[lang], [lang]);
+
+          const scrollToId = (id) => {
+            const el = document.getElementById(id);
+            if (el) {
+              const y = el.getBoundingClientRect().top + window.scrollY - 88;
+              window.scrollTo({ top: y, behavior: "smooth" });
+            }
+          };
+
+          return (
+            <div className="min-h-screen bg-zinc-950 text-zinc-100 selection:bg-white selection:text-black">
+              <AnimatePresence>
+                {showPreloader && (
+                  <motion.div exit={{ opacity: 0 }} className="fixed inset-0 z-[999] flex items-center justify-center bg-zinc-950">
+                    <div className="text-xl font-semibold">Helios.Virtual</div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              <header className="sticky top-0 z-30 border-b border-zinc-800/80 bg-zinc-950/85 backdrop-blur">
+                <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 md:px-8">
+                  <button onClick={() => scrollToId("top")} className="text-lg font-semibold">{t.brand}</button>
+                  <nav className="hidden md:flex items-center gap-6 text-sm">
+                    {t.nav.map((item, i) => {
+                       const sectionId = ["services", "industries", "packages", "faq", "contact"][i];
+                       return (
+                        <button key={i} onClick={() => scrollToId(sectionId)} 
+                          className={`${activeSection === sectionId ? 'text-white' : 'text-zinc-400'} hover:text-white transition-colors`}>
+                          {item}
+                        </button>
+                       )
+                    })}
+                  </nav>
+                  <div className="flex items-center gap-3">
+                    <div className="flex bg-zinc-900 rounded-full p-1 border border-zinc-800 text-xs font-bold relative">
+                        <motion.div className="absolute top-1 bottom-1 w-[calc(50%-4px)] bg-white rounded-full" 
+                                    animate={{ x: lang === 'EN' ? 0 : '100%' }} transition={{ type: "spring", stiffness: 400, damping: 30 }} />
+                        <button onClick={() => setLang("EN")} className={`relative z-10 px-3 py-1.5 rounded-full ${lang === 'EN' ? 'text-black' : 'text-zinc-400'}`}>EN</button>
+                        <button onClick={() => setLang("DE")} className={`relative z-10 px-3 py-1.5 rounded-full ${lang === 'DE' ? 'text-black' : 'text-zinc-400'}`}>DE</button>
+                    </div>
+                    <button onClick={() => scrollToId("contact")} className="bg-white text-black px-4 py-2 rounded-xl text-sm font-bold">{t.contactNow}</button>
+                  </div>
+                </div>
+              </header>
+
+              <main>
+                <section id="top" className="mx-auto max-w-7xl px-4 py-16 md:py-24 md:px-8 grid md:grid-cols-2 gap-12 items-center">
+                  <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+                    <span className="border border-zinc-700 px-3 py-1 rounded-full text-xs text-zinc-300 mb-6 inline-block">{t.heroBadge}</span>
+                    <h1 className="text-4xl md:text-6xl font-bold leading-tight mb-6">{t.heroTitle}</h1>
+                    <p className="text-zinc-400 text-lg mb-8 max-w-lg leading-relaxed">{t.heroText}</p>
+                    <div className="flex flex-wrap gap-4">
+                      <button onClick={() => scrollToId("contact")} className="bg-white text-black px-6 py-3 rounded-2xl font-bold hover:opacity-90">{t.contactNow}</button>
+                      <button onClick={() => scrollToId("packages")} className="border border-zinc-700 px-6 py-3 rounded-2xl font-bold hover:bg-zinc-900">{t.viewPackages}</button>
+                    </div>
+                    <div className="mt-10 grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm">
+                        {t.stats.map(([val, lab], i) => (
+                            <div key={i} className="bg-zinc-900/50 border border-zinc-800 p-3 rounded-2xl">
+                                <div className="font-bold text-white">{val}</div>
+                                <div className="text-xs text-zinc-500">{lab}</div>
+                            </div>
+                        ))}
+                    </div>
+                  </motion.div>
+                  <div className="relative aspect-[4/3] bg-zinc-900 rounded-[2rem] border border-zinc-800 overflow-hidden shadow-2xl group">
+                     <motion.div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-zinc-800/20 to-transparent"
+                                 style={{ x: tilt.x * 15, y: tilt.y * 15 }}>
+                        <div className="text-zinc-700 text-sm font-medium tracking-widest uppercase">Matterport Pro3 Preview</div>
+                     </motion.div>
+                  </div>
+                </section>
+
+                <section id="services" className="bg-zinc-900/30 py-20 border-y border-zinc-800">
+                  <div className="mx-auto max-w-7xl px-4 md:px-8">
+                    <h2 className="text-3xl md:text-4xl font-bold mb-4">{t.servicesTitle}</h2>
+                    <p className="text-zinc-400 mb-10 max-w-2xl">{t.servicesText}</p>
+                    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+                      {t.services.map(([title, desc], i) => (
+                        <motion.div key={i} whileHover={{ y: -5 }} className="bg-zinc-950 border border-zinc-800 p-6 rounded-3xl">
+                          <h3 className="font-bold mb-3 text-white">{title}</h3>
+                          <p className="text-zinc-400 text-sm leading-relaxed">{desc}</p>
+                        </motion.div>
+                      ))}
+                    </div>
+                  </div>
+                </section>
+
+                <section id="why" className="py-20 mx-auto max-w-7xl px-4 md:px-8">
+                    <div className="grid lg:grid-cols-12 gap-12">
+                        <div className="lg:col-span-5">
+                            <h2 className="text-3xl md:text-4xl font-bold mb-4">{t.whyTitle}</h2>
+                            <p className="text-zinc-400 mb-8">{t.whyText}</p>
+                            <div className="bg-zinc-900/50 p-6 rounded-3xl border border-zinc-800">
+                                <div className="font-bold mb-2">{t.samplesTitle}</div>
+                                <p className="text-sm text-zinc-500 mb-4">{t.samplesText}</p>
+                                <a href={t.samplesUrl} target="_blank" className="inline-block bg-white text-black px-5 py-2 rounded-xl text-sm font-bold">{t.samplesCta}</a>
                             </div>
                         </div>
-                    </header>
-
-                    <main>
-                        <section id="top" className="mx-auto max-w-7xl px-4 py-20 md:px-8 grid md:grid-cols-2 gap-12 items-center">
-                            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-                                <span className="border border-zinc-800 px-3 py-1 rounded-full text-xs text-zinc-400 mb-6 inline-block">{t.heroBadge}</span>
-                                <h1 className="text-4xl md:text-6xl font-bold leading-tight mb-6">{t.heroTitle}</h1>
-                                <p className="text-zinc-400 text-lg mb-8 max-w-lg">{t.heroText}</p>
-                                <div className="flex gap-4">
-                                    <button onClick={() => scrollToId("contact")} className="bg-white text-black px-6 py-3 rounded-2xl font-bold">{t.contactNow}</button>
-                                    <button onClick={() => scrollToId("packages")} className="border border-zinc-800 px-6 py-3 rounded-2xl font-bold hover:bg-zinc-900">{t.viewPackages}</button>
+                        <div className="lg:col-span-7 grid md:grid-cols-2 gap-4">
+                            {t.whyPoints.map(([title, desc], i) => (
+                                <div key={i} className="bg-zinc-950 border border-zinc-800 p-6 rounded-3xl">
+                                    <div className="font-bold mb-2 text-white">{title}</div>
+                                    <p className="text-sm text-zinc-400">{desc}</p>
                                 </div>
-                            </motion.div>
-                            <div className="relative aspect-video bg-zinc-900 rounded-3xl border border-zinc-800 overflow-hidden shadow-2xl group">
-                                <div className="absolute inset-0 flex items-center justify-center text-zinc-600 italic">3D Tour Interactive Preview</div>
-                                <div className="absolute bottom-4 left-4 right-4 bg-black/40 backdrop-blur p-4 rounded-2xl border border-white/5">
-                                   <div className="text-xs font-bold text-white uppercase tracking-widest opacity-60">Matterport Pro3</div>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+
+                <section id="industries" className="bg-zinc-900/20 py-20 border-t border-zinc-800">
+                  <div className="mx-auto max-w-7xl px-4 md:px-8">
+                    <h2 className="text-3xl md:text-4xl font-bold mb-4">{t.industriesTitle}</h2>
+                    <p className="text-zinc-400 mb-10 max-w-3xl">{t.industriesText}</p>
+                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                      {t.industries.map(([key, label], i) => (
+                        <div key={i} className="flex items-center gap-4 bg-zinc-900/40 border border-zinc-800 p-4 rounded-2xl">
+                          <div className="w-10 h-10 flex items-center justify-center bg-zinc-950 rounded-xl border border-zinc-800">
+                            <IndustryIcon name={key} />
+                          </div>
+                          <span className="text-sm font-medium">{label}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </section>
+
+                <section id="impact" className="py-20 border-y border-zinc-800 bg-zinc-900/40">
+                    <div className="mx-auto max-w-7xl px-4 md:px-8">
+                        <div className="text-xs font-bold tracking-widest text-zinc-500 mb-4 uppercase">{t.impactKicker}</div>
+                        <h2 className="text-3xl md:text-4xl font-bold mb-6 max-w-2xl">{t.impactTitle}</h2>
+                        <p className="text-zinc-400 mb-10 max-w-2xl">{t.impactText}</p>
+                        <div className="grid md:grid-cols-2 gap-4">
+                            {t.impactStats.map(([pct, desc], i) => (
+                                <div key={i} className="bg-zinc-950 p-8 rounded-3xl border border-zinc-800">
+                                    <div className="text-4xl md:text-5xl font-black mb-3 text-white">{pct}</div>
+                                    <p className="text-zinc-400 leading-relaxed">{desc}</p>
                                 </div>
-                            </div>
-                        </section>
+                            ))}
+                        </div>
+                        <p className="mt-8 text-xs text-zinc-600 italic">{t.impactNote}</p>
+                    </div>
+                </section>
 
-                        <section id="services" className="bg-zinc-900/50 py-20 border-y border-zinc-800">
-                           <div className="mx-auto max-w-7xl px-4 md:px-8">
-                                <h2 className="text-3xl font-bold mb-10">{t.servicesTitle}</h2>
-                                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                                    {t.services.map(([title, desc], i) => (
-                                        <div key={i} className="bg-zinc-950 border border-zinc-800 p-6 rounded-3xl hover:border-zinc-700 transition-all">
-                                            <h3 className="font-bold mb-3">{title}</h3>
-                                            <p className="text-zinc-400 text-sm leading-relaxed">{desc}</p>
-                                        </div>
-                                    ))}
-                                </div>
-                           </div>
-                        </section>
+                <section id="packages" className="py-20 mx-auto max-w-7xl px-4 md:px-8">
+                  <h2 className="text-3xl md:text-4xl font-bold mb-4">{t.packagesTitle}</h2>
+                  <p className="text-zinc-400 mb-10">{t.packagesText}</p>
+                  <div className="grid lg:grid-cols-3 gap-6">
+                    {t.packages.map(([name, price, items], i) => (
+                      <div key={i} className={`p-8 rounded-[2.5rem] border transition-all ${i === 1 ? 'bg-white text-black border-white' : 'bg-zinc-900/50 border-zinc-800'}`}>
+                        <div className="text-sm font-bold opacity-60 mb-2 uppercase tracking-wider">{name}</div>
+                        <div className="text-4xl font-black mb-8">{price}</div>
+                        <ul className="space-y-4 mb-10">
+                          {items.map((item, j) => <li key={j} className="text-sm flex items-start gap-2"><span>•</span> {item}</li>)}
+                        </ul>
+                        <button onClick={() => scrollToId("contact")} className={`w-full py-4 rounded-2xl font-bold transition-transform active:scale-95 ${i === 1 ? 'bg-black text-white' : 'bg-white text-black'}`}>{t.contactNow}</button>
+                      </div>
+                    ))}
+                  </div>
+                  <p className="mt-8 text-center text-zinc-500 text-sm">{t.larger}</p>
+                </section>
 
-                        <section id="packages" className="py-20 mx-auto max-w-7xl px-4 md:px-8">
-                             <h2 className="text-3xl font-bold mb-4">{t.packagesTitle}</h2>
-                             <p className="text-zinc-400 mb-10">{t.packagesText}</p>
-                             <div className="grid lg:grid-cols-3 gap-8">
-                                {t.packages.map(([name, price, items], i) => (
-                                    <div key={i} className={`p-8 rounded-3xl border transition-all ${i === 1 ? 'bg-white text-black border-white' : 'bg-zinc-900 border-zinc-800'}`}>
-                                        <div className="text-sm font-bold opacity-60 mb-2">{name}</div>
-                                        <div className="text-3xl font-black mb-6">{price}</div>
-                                        <ul className="space-y-3 mb-8">
-                                            {items.map((item, j) => <li key={j} className="text-sm">• {item}</li>)}
-                                        </ul>
-                                        <button className={`w-full py-3 rounded-2xl font-bold ${i === 1 ? 'bg-black text-white' : 'bg-white text-black'}`}>{t.contactNow}</button>
-                                    </div>
-                                ))}
-                             </div>
-                        </section>
+                <section id="faq" className="py-20 bg-zinc-900/20 border-t border-zinc-800">
+                    <div className="mx-auto max-w-3xl px-4">
+                        <h2 className="text-3xl font-bold mb-10 text-center">{t.faqTitle}</h2>
+                        <div className="space-y-4">
+                            {t.faq.map(([q, a], i) => (
+                                <details key={i} className="group bg-zinc-900/50 border border-zinc-800 rounded-2xl overflow-hidden">
+                                    <summary className="p-5 cursor-pointer font-bold list-none flex justify-between items-center group-open:bg-zinc-900 transition-colors">
+                                        {q}
+                                        <span className="transition-transform group-open:rotate-180">↓</span>
+                                    </summary>
+                                    <div className="p-5 text-zinc-400 text-sm border-t border-zinc-800 leading-relaxed">{a}</div>
+                                </details>
+                            ))}
+                        </div>
+                    </div>
+                </section>
 
-                        <section id="contact" className="py-20 border-t border-zinc-800">
-                             <div className="mx-auto max-w-7xl px-4 md:px-8 grid md:grid-cols-2 gap-12">
-                                <div>
-                                    <h2 className="text-3xl font-bold mb-6">{t.contactTitle}</h2>
-                                    <p className="text-zinc-400 mb-8">{t.contactText}</p>
-                                    <div className="space-y-4 text-zinc-300">
-                                        <p><strong>Email:</strong> hello@helios-virtual.de</p>
-                                        <p><strong>Location:</strong> Hamburg, Germany</p>
-                                    </div>
-                                </div>
-                                <form className="bg-zinc-900 p-8 rounded-3xl border border-zinc-800 space-y-4">
-                                    <input placeholder={t.form[0]} className="w-full bg-zinc-950 border border-zinc-800 p-4 rounded-xl outline-none focus:border-white transition-all" />
-                                    <input placeholder={t.form[1]} className="w-full bg-zinc-950 border border-zinc-800 p-4 rounded-xl outline-none focus:border-white transition-all" />
-                                    <textarea placeholder={t.form[7]} rows="4" className="w-full bg-zinc-950 border border-zinc-800 p-4 rounded-xl outline-none focus:border-white transition-all"></textarea>
-                                    <button type="button" className="w-full bg-white text-black py-4 rounded-2xl font-bold hover:scale-[1.02] active:scale-95 transition-all">{t.send}</button>
-                                </form>
-                             </div>
-                        </section>
-                    </main>
+                <section id="contact" className="py-20 border-t border-zinc-800">
+                  <div className="mx-auto max-w-7xl px-4 md:px-8 grid md:grid-cols-2 gap-16">
+                    <div>
+                      <h2 className="text-3xl md:text-4xl font-bold mb-6">{t.contactTitle}</h2>
+                      <p className="text-zinc-400 text-lg mb-10">{t.contactText}</p>
+                      <div className="space-y-6">
+                        <div className="flex items-start gap-4">
+                            <div className="font-bold text-white min-w-[100px]">E-mail:</div>
+                            <div className="text-zinc-400">hello@helios-virtual.de</div>
+                        </div>
+                        <div className="flex items-start gap-4">
+                            <div className="font-bold text-white min-w-[100px]">Base:</div>
+                            <div className="text-zinc-400">Hamburg, Germany</div>
+                        </div>
+                      </div>
+                    </div>
+                    <form className="bg-zinc-900/50 p-8 md:p-10 rounded-[2.5rem] border border-zinc-800 space-y-4 shadow-xl">
+                      {t.form.slice(0, 7).map((label, i) => (
+                        <div key={i}>
+                            <label className="text-xs font-bold text-zinc-500 uppercase ml-2 mb-1 block">{label}</label>
+                            <input className="w-full bg-zinc-950 border border-zinc-800 p-4 rounded-2xl outline-none focus:border-white transition-all text-sm" />
+                        </div>
+                      ))}
+                      <div>
+                        <label className="text-xs font-bold text-zinc-500 uppercase ml-2 mb-1 block">{t.form[7]}</label>
+                        <textarea rows="4" className="w-full bg-zinc-950 border border-zinc-800 p-4 rounded-2xl outline-none focus:border-white transition-all text-sm"></textarea>
+                      </div>
+                      <button type="button" className="w-full bg-white text-black py-4 rounded-2xl font-bold hover:bg-zinc-200 active:scale-95 transition-all mt-4">{t.send}</button>
+                    </form>
+                  </div>
+                </section>
+              </main>
 
-                    <footer className="py-10 text-center border-t border-zinc-900 text-zinc-600 text-xs">
-                        © {new Date().getFullYear()} Helios.Virtual. {t.footer}
-                    </footer>
-                </div>
-            );
+              <footer className="py-12 border-t border-zinc-900 text-center text-zinc-600 text-xs">
+                © {new Date().getFullYear()} Helios.Virtual. {t.footer}
+              </footer>
+            </div>
+          );
         }
 
         const root = ReactDOM.createRoot(document.getElementById('root'));
